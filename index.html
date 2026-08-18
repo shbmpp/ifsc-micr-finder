@@ -558,7 +558,7 @@
     }
     
     @media(prefers-reduced-motion:reduce) {
-
+      
       *,
       *::before,
       *::after {
@@ -747,18 +747,24 @@
       branchSelect.options[0].textContent = t("selectBranch");
       renderRecent();
     }
-    $("#languageBtn").addEventListener("click", () => { language = language === "en" ? "bn" : "en";
+    $("#languageBtn").addEventListener("click", () => {
+      language = language === "en" ? "bn" : "en";
       localStorage.setItem(LANGUAGE_KEY, language);
-      applyLanguage() });
+      applyLanguage()
+    });
     
     let theme = localStorage.getItem(THEME_KEY) || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     
-    function applyTheme(v) { document.body.classList.toggle("dark", v === "dark");
-      $("#themeBtn").textContent = v === "dark" ? "☀️" : "🌙" }
+    function applyTheme(v) {
+      document.body.classList.toggle("dark", v === "dark");
+      $("#themeBtn").textContent = v === "dark" ? "☀️" : "🌙"
+    }
     applyTheme(theme);
-    $("#themeBtn").addEventListener("click", () => { theme = theme === "dark" ? "light" : "dark";
+    $("#themeBtn").addEventListener("click", () => {
+      theme = theme === "dark" ? "light" : "dark";
       localStorage.setItem(THEME_KEY, theme);
-      applyTheme(theme) });
+      applyTheme(theme)
+    });
     
     $$(".tab").forEach(tab => tab.addEventListener("click", () => {
       $$(".tab").forEach(x => x.classList.remove("active"));
@@ -767,8 +773,11 @@
       result.classList.remove("show");
       empty.style.display = "block";
       hideStatus();
-      if (searchType === "location") { searchForm.style.display = "none";
-        locationSearch.hidden = false; return }
+      if (searchType === "location") {
+        searchForm.style.display = "none";
+        locationSearch.hidden = false;
+        return
+      }
       searchForm.style.display = "block";
       locationSearch.hidden = true;
       codeInput.value = "";
@@ -800,10 +809,12 @@
         displayResult(data);
         saveRecent(data);
         hideStatus();
-      } catch (err) { console.error(err);
+      } catch (err) {
+        console.error(err);
         result.classList.remove("show");
         empty.style.display = "block";
-        showError(err.message || t("notFound")) }
+        showError(err.message || t("notFound"))
+      }
     });
     
     function normalize(x) { return { ifsc: x.IFSC || x.ifsc, micr: x.MICR || x.micr, bank_code: x.BANKCODE || x.bank_code, bank_name: x.BANK || x.bank_name, branch: x.BRANCH || x.branch, address: x.ADDRESS || x.address, city: x.CITY || x.city, district: x.DISTRICT || x.district, state: x.STATE || x.state, contact: x.CONTACT || x.contact, swift: x.SWIFT || x.swift, neft: x.NEFT === true || x.neft === true, rtgs: x.RTGS === true || x.rtgs === true, imps: x.IMPS === true || x.imps === true, upi: x.UPI === true || x.upi === true } }
@@ -832,50 +843,120 @@
     
     function setText(s, v) { $(s).textContent = v || "—" }
     
-    function setService(s, n, v) { const el = $(s);
+    function setService(s, n, v) {
+      const el = $(s);
       el.classList.toggle("active", v === true);
-      el.textContent = v === true ? `✓ ${n}` : `✕ ${n}` }
+      el.textContent = v === true ? `✓ ${n}` : `✕ ${n}`
+    }
     
     function getInitials(name) { const w = String(name).replace(/[^a-zA-Z ]/g, "").trim().split(/\s+/).filter(Boolean); return !w.length ? "🏦" : w.length === 1 ? w[0].slice(0, 2).toUpperCase() : (w[0][0] + w[1][0]).toUpperCase() }
     
-    function showLoading(m) { status.className = "status show loading";
-      status.textContent = "⏳ " + m }
+    function showLoading(m) {
+      status.className = "status show loading";
+      status.textContent = "⏳ " + m
+    }
     
-    function showError(m) { status.className = "status show error";
-      status.textContent = "⚠️ " + m }
+    function showError(m) {
+      status.className = "status show error";
+      status.textContent = "⚠️ " + m
+    }
     
-    function showSuccess(m) { status.className = "status show success";
+    function showSuccess(m) {
+      status.className = "status show success";
       status.textContent = "✓ " + m;
-      setTimeout(hideStatus, 1800) }
+      setTimeout(hideStatus, 1800)
+    }
     
-    function hideStatus() { status.className = "status";
-      status.textContent = "" }
+    function hideStatus() {
+      status.className = "status";
+      status.textContent = ""
+    }
     
     async function api(path) { const r = await fetch(API_BASE + path, { headers: { Accept: "application/json" } }); if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() }
     
-    function resetSelect(el, placeholder) { el.innerHTML = `<option value="">${placeholder}</option>`;
-      el.disabled = true }
+    function resetSelect(el, placeholder) {
+      el.innerHTML = `<option value="">${placeholder}</option>`;
+      el.disabled = true
+    }
     
-    function fillSelect(el, items, placeholder) { resetSelect(el, placeholder);
-      items.forEach(v => { const o = document.createElement("option");
+    function fillSelect(el, items, placeholder) {
+      resetSelect(el, placeholder);
+      items.forEach(v => {
+        const o = document.createElement("option");
         o.value = v;
         o.textContent = v;
-        el.appendChild(o) });
-      el.disabled = !items.length }
+        el.appendChild(o)
+      });
+      el.disabled = !items.length
+    }
     
     let bankMap = {};
     async function loadBanks() {
+      
       try {
-        const data = await api("/banks");
-        bankMap = data;
-        const entries = Object.entries(data).sort((a, b) => a[1].localeCompare(b[1]));
-        bankSelect.innerHTML = `<option value="">${t("selectBank")}</option>`;
-        entries.forEach(([code, name]) => { const o = document.createElement("option");
-          o.value = code;
-          o.textContent = `${name} (${code})`;
-          bankSelect.appendChild(o) });
-      } catch (e) { console.error(e);
-        showError("Unable to load bank list.") }
+        
+        const data =
+          await api("/banks");
+        
+        const banks =
+          Array.isArray(data) ?
+          data :
+          data.banks || [];
+        
+        bankMap = Object.fromEntries(
+          banks.map(bank => [
+            bank.code,
+            bank.name
+          ])
+        );
+        
+        banks.sort(
+          (a, b) =>
+          String(a.name)
+          .localeCompare(
+            String(b.name)
+          )
+        );
+        
+        bankSelect.innerHTML =
+          `<option value="">
+        ${t("selectBank")}
+      </option>`;
+        
+        banks.forEach(bank => {
+          
+          const option =
+            document.createElement(
+              "option"
+            );
+          
+          option.value =
+            bank.code;
+          
+          option.textContent =
+            `${bank.name} (${bank.code})`;
+          
+          bankSelect.appendChild(
+            option
+          );
+          
+        });
+        
+      }
+      
+      catch (error) {
+        
+        console.error(
+          "Bank list error:",
+          error
+        );
+        
+        showError(
+          "Unable to load bank list."
+        );
+        
+      }
+      
     }
     const STATE_CODES = { "ANDHRA PRADESH": "IN-AP", "ARUNACHAL PRADESH": "IN-AR", "ASSAM": "IN-AS", "BIHAR": "IN-BR", "CHHATTISGARH": "IN-CG", "GOA": "IN-GA", "GUJARAT": "IN-GJ", "HARYANA": "IN-HR", "HIMACHAL PRADESH": "IN-HP", "JHARKHAND": "IN-JH", "KARNATAKA": "IN-KA", "KERALA": "IN-KL", "MADHYA PRADESH": "IN-MP", "MAHARASHTRA": "IN-MH", "MANIPUR": "IN-MN", "MEGHALAYA": "IN-ML", "MIZORAM": "IN-MZ", "NAGALAND": "IN-NL", "ODISHA": "IN-OR", "PUNJAB": "IN-PB", "RAJASTHAN": "IN-RJ", "SIKKIM": "IN-SK", "TAMIL NADU": "IN-TN", "TELANGANA": "IN-TS", "TRIPURA": "IN-TR", "UTTAR PRADESH": "IN-UP", "UTTARAKHAND": "IN-UK", "WEST BENGAL": "IN-WB", "DELHI": "IN-DL", "JAMMU AND KASHMIR": "IN-JK", "LADAKH": "IN-LA", "CHANDIGARH": "IN-CH", "PUDUCHERRY": "IN-PY", "ANDAMAN AND NICOBAR ISLANDS": "IN-AN", "DADRA AND NAGAR HAVELI AND DAMAN AND DIU": "IN-DH", "LAKSHADWEEP": "IN-LD" };
     
@@ -886,15 +967,23 @@
       resetSelect(branchSelect, t("selectBranch"));
       locationSearchBtn.disabled = true;
       if (!b) return;
-      try { showLoading(t("loadingStates")); const d = await api(`/places?bankcode=${encodeURIComponent(b)}`); const states = (d.states || []).sort();
-        states.forEach(s => { const o = document.createElement("option");
+      try {
+        showLoading(t("loadingStates"));
+        const d = await api(`/places?bankcode=${encodeURIComponent(b)}`);
+        const states = (d.states || []).sort();
+        states.forEach(s => {
+          const o = document.createElement("option");
           o.value = STATE_CODES[s] || s;
           o.dataset.name = s;
           o.textContent = s;
-          stateSelect.appendChild(o) });
+          stateSelect.appendChild(o)
+        });
         stateSelect.disabled = !states.length;
-        hideStatus() } catch (e) { console.error(e);
-        showError("Unable to load states.") }
+        hideStatus()
+      } catch (e) {
+        console.error(e);
+        showError("Unable to load states.")
+      }
     });
     stateSelect.addEventListener("change", async () => {
       const b = bankSelect.value,
@@ -903,10 +992,15 @@
       resetSelect(branchSelect, t("selectBranch"));
       locationSearchBtn.disabled = true;
       if (!b || !s) return;
-      try { showLoading(t("loadingDistricts")); const d = await api(`/places?bankcode=${encodeURIComponent(b)}&state=${encodeURIComponent(s)}`);
+      try {
+        showLoading(t("loadingDistricts"));
+        const d = await api(`/places?bankcode=${encodeURIComponent(b)}&state=${encodeURIComponent(s)}`);
         fillSelect(districtSelect, (d.districts || []).sort(), t("selectDistrict"));
-        hideStatus() } catch (e) { console.error(e);
-        showError("Unable to load districts.") }
+        hideStatus()
+      } catch (e) {
+        console.error(e);
+        showError("Unable to load districts.")
+      }
     });
     districtSelect.addEventListener("change", async () => {
       const b = bankSelect.value,
@@ -915,10 +1009,15 @@
       resetSelect(branchSelect, t("selectBranch"));
       locationSearchBtn.disabled = true;
       if (!b || !s || !d) return;
-      try { showLoading(t("loadingBranches")); const x = await api(`/places?bankcode=${encodeURIComponent(b)}&state=${encodeURIComponent(s)}&district=${encodeURIComponent(d)}`);
+      try {
+        showLoading(t("loadingBranches"));
+        const x = await api(`/places?bankcode=${encodeURIComponent(b)}&state=${encodeURIComponent(s)}&district=${encodeURIComponent(d)}`);
         fillSelect(branchSelect, (x.branches || []).sort(), t("selectBranch"));
-        hideStatus() } catch (e) { console.error(e);
-        showError("Unable to load branches.") }
+        hideStatus()
+      } catch (e) {
+        console.error(e);
+        showError("Unable to load branches.")
+      }
     });
     branchSelect.addEventListener("change", () => { locationSearchBtn.disabled = !branchSelect.value });
     
@@ -947,64 +1046,97 @@
         saveRecent(currentData);
         hideStatus();
         result.scrollIntoView({ behavior: "smooth", block: "start" });
-      } catch (e) { console.error(e);
-        showError(e.message || "Branch search failed.") }
+      } catch (e) {
+        console.error(e);
+        showError(e.message || "Branch search failed.")
+      }
     }
     locationSearchBtn.addEventListener("click", findBranch);
     
     $$(".copy").forEach(btn => btn.addEventListener("click", async () => {
       const v = $("#" + btn.dataset.target).textContent.trim();
       if (!v || v === "—") return;
-      try { await navigator.clipboard.writeText(v); const old = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(v);
+        const old = btn.textContent;
         btn.textContent = "✓";
         showSuccess(t("copied"));
-        setTimeout(() => btn.textContent = old, 1000) } catch { showError("Copy failed.") }
+        setTimeout(() => btn.textContent = old, 1000)
+      } catch { showError("Copy failed.") }
     }));
     
     function getRecent() { try { return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]") } catch { return [] } }
     
-    function saveRecent(d) { let r = getRecent().filter(x => x.ifsc !== d.ifsc);
+    function saveRecent(d) {
+      let r = getRecent().filter(x => x.ifsc !== d.ifsc);
       r.unshift({ ifsc: d.ifsc, micr: d.micr, bank: d.bank_name, branch: d.branch });
       localStorage.setItem(RECENT_KEY, JSON.stringify(r.slice(0, 8)));
-      renderRecent() }
+      renderRecent()
+    }
     
-    function renderRecent() { const r = getRecent(); const list = $("#recentList");
-      list.innerHTML = ""; if (!r.length) { $("#recentSection").style.display = "none"; return } $("#recentSection").style.display = "block";
-      r.forEach(x => { const row = document.createElement("div");
+    function renderRecent() {
+      const r = getRecent();
+      const list = $("#recentList");
+      list.innerHTML = "";
+      if (!r.length) { $("#recentSection").style.display = "none"; return } $("#recentSection").style.display = "block";
+      r.forEach(x => {
+        const row = document.createElement("div");
         row.className = "recent-item";
         row.innerHTML = `<div><div class="recent-code">${escapeHTML(x.ifsc)}</div><div class="recent-bank">${escapeHTML(x.bank||"")}${x.branch?" · "+escapeHTML(x.branch):""}</div></div><button class="recent-open" data-ifsc="${escapeHTML(x.ifsc)}">→</button>`;
-        list.appendChild(row) });
-      list.querySelectorAll(".recent-open").forEach(b => b.addEventListener("click", () => { searchType = "ifsc";
+        list.appendChild(row)
+      });
+      list.querySelectorAll(".recent-open").forEach(b => b.addEventListener("click", () => {
+        searchType = "ifsc";
         $$(".tab").forEach(x => x.classList.toggle("active", x.dataset.type === "ifsc"));
         searchForm.style.display = "block";
         locationSearch.hidden = true;
         codeInput.value = b.dataset.ifsc;
         codeInput.dispatchEvent(new Event("input"));
-        searchForm.requestSubmit() })) }
+        searchForm.requestSubmit()
+      }))
+    }
     
     function escapeHTML(v) { return String(v || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;") }
-    $("#clearRecent").addEventListener("click", () => { localStorage.removeItem(RECENT_KEY);
-      renderRecent() });
+    $("#clearRecent").addEventListener("click", () => {
+      localStorage.removeItem(RECENT_KEY);
+      renderRecent()
+    });
     
     function isSaved(d) { try { return JSON.parse(localStorage.getItem("ifscSaved") || "[]").some(x => x.ifsc === d.ifsc) } catch { return false } }
-    $("#saveBtn").addEventListener("click", () => { if (!currentData) return; let s = JSON.parse(localStorage.getItem("ifscSaved") || "[]"); if (s.some(x => x.ifsc === currentData.ifsc)) s = s.filter(x => x.ifsc !== currentData.ifsc);
+    $("#saveBtn").addEventListener("click", () => {
+      if (!currentData) return;
+      let s = JSON.parse(localStorage.getItem("ifscSaved") || "[]");
+      if (s.some(x => x.ifsc === currentData.ifsc)) s = s.filter(x => x.ifsc !== currentData.ifsc);
       else s.unshift({ ifsc: currentData.ifsc, micr: currentData.micr, bank: currentData.bank_name, branch: currentData.branch });
       localStorage.setItem("ifscSaved", JSON.stringify(s));
-      $("#saveBtn").textContent = isSaved(currentData) ? t("saved") : t("save") });
-    $("#shareBtn").addEventListener("click", async () => { if (!currentData) return; const d = currentData,
-        text = `${d.bank_name||""}\n\nBranch: ${d.branch||""}\nIFSC: ${d.ifsc||""}\nMICR: ${d.micr||""}\nAddress: ${d.address||""}\nCity: ${d.city||""}\nDistrict: ${d.district||""}\nState: ${d.state||""}`; try { if (navigator.share) await navigator.share({ title: `${d.bank_name} - ${d.branch}`, text });
-        else { await navigator.clipboard.writeText(text);
-          showSuccess(t("copied")) } } catch (e) { if (e.name !== "AbortError") showError("Unable to share.") } });
+      $("#saveBtn").textContent = isSaved(currentData) ? t("saved") : t("save")
+    });
+    $("#shareBtn").addEventListener("click", async () => {
+      if (!currentData) return;
+      const d = currentData,
+        text = `${d.bank_name||""}\n\nBranch: ${d.branch||""}\nIFSC: ${d.ifsc||""}\nMICR: ${d.micr||""}\nAddress: ${d.address||""}\nCity: ${d.city||""}\nDistrict: ${d.district||""}\nState: ${d.state||""}`;
+      try {
+        if (navigator.share) await navigator.share({ title: `${d.bank_name} - ${d.branch}`, text });
+        else {
+          await navigator.clipboard.writeText(text);
+          showSuccess(t("copied"))
+        }
+      } catch (e) { if (e.name !== "AbortError") showError("Unable to share.") }
+    });
     
     let deferredPrompt = null;
-    window.addEventListener("beforeinstallprompt", e => { e.preventDefault();
+    window.addEventListener("beforeinstallprompt", e => {
+      e.preventDefault();
       deferredPrompt = e;
-      $("#installBtn").style.display = "grid" });
-    $("#installBtn").addEventListener("click", async () => { if (!deferredPrompt) return;
+      $("#installBtn").style.display = "grid"
+    });
+    $("#installBtn").addEventListener("click", async () => {
+      if (!deferredPrompt) return;
       deferredPrompt.prompt();
       await deferredPrompt.userChoice;
       deferredPrompt = null;
-      $("#installBtn").style.display = "none" });
+      $("#installBtn").style.display = "none"
+    });
     window.addEventListener("appinstalled", () => $("#installBtn").style.display = "none");
     if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(console.error));
     applyLanguage();
