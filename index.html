@@ -1022,35 +1022,145 @@
     branchSelect.addEventListener("change", () => { locationSearchBtn.disabled = !branchSelect.value });
     
     async function findBranch() {
-      const bank = bankSelect.value,
-        state = stateSelect.value,
-        district = districtSelect.value,
-        branch = branchSelect.value;
-      if (!bank || !state || !district || !branch) return;
-      showLoading(t("finding"));
-      try {
-        let offset = 0,
-          limit = 100,
-          match = null;
-        for (let page = 0; page < 10; page++) {
-          const d = await api(`/search?bankcode=${encodeURIComponent(bank)}&state=${encodeURIComponent(state)}&limit=${limit}&offset=${offset}`);
-          const rows = Array.isArray(d) ? d : (d.results || d.data || []);
-          match = rows.find(x => String(x.DISTRICT || "").trim().toUpperCase() === district.toUpperCase() && String(x.BRANCH || "").trim().toUpperCase() === branch.toUpperCase());
-          if (match) break;
-          if (rows.length < limit) break;
-          offset += limit;
-        }
-        if (!match) throw new Error("Selected branch details could not be matched.");
-        currentData = normalize(match);
-        displayResult(currentData);
-        saveRecent(currentData);
-        hideStatus();
-        result.scrollIntoView({ behavior: "smooth", block: "start" });
-      } catch (e) {
-        console.error(e);
-        showError(e.message || "Branch search failed.")
+      
+      const bank =
+        bankSelect.value;
+      
+      const state =
+        stateSelect.value;
+      
+      const district =
+        districtSelect.value;
+      
+      const branch =
+        branchSelect.value;
+      
+      
+      if (
+        !bank ||
+        !state ||
+        !district ||
+        !branch
+      ) {
+        
+        return;
+        
       }
+      
+      
+      showLoading(
+        t("finding")
+      );
+      
+      
+      result.classList.remove(
+        "show"
+      );
+      
+      empty.style.display =
+        "none";
+      
+      
+      try {
+        
+        const params =
+          new URLSearchParams({
+            bankcode: bank,
+            state: state,
+            district: district,
+            branch: branch
+          });
+        
+        
+        const response =
+          await fetch(
+            `${API_BASE}/branch?${params}`,
+            {
+              method: "GET",
+              headers: {
+                "Accept": "application/json"
+              }
+            }
+          );
+        
+        
+        const data =
+          await response.json();
+        
+        
+        if (!response.ok) {
+          
+          throw new Error(
+            data.error ||
+            "Selected branch could not be found."
+          );
+          
+        }
+        
+        
+        const normalized =
+          normalize(data);
+        
+        
+        if (!normalized.ifsc) {
+          
+          throw new Error(
+            t("notFound")
+          );
+          
+        }
+        
+        
+        currentData =
+          normalized;
+        
+        
+        displayResult(
+          normalized
+        );
+        
+        
+        saveRecent(
+          normalized
+        );
+        
+        
+        hideStatus();
+        
+        
+        result.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+        
+        
+      }
+      
+      catch (error) {
+        
+        console.error(
+          "Branch search error:",
+          error
+        );
+        
+        
+        result.classList.remove(
+          "show"
+        );
+        
+        empty.style.display =
+          "block";
+        
+        
+        showError(
+          error.message ||
+          "Branch search failed."
+        );
+        
+      }
+      
     }
+    
     locationSearchBtn.addEventListener("click", findBranch);
     
     $$(".copy").forEach(btn => btn.addEventListener("click", async () => {
