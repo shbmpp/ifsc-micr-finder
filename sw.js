@@ -1,5 +1,5 @@
 const CACHE_NAME =
-  "ifsc-finder-v1";
+  "ifsc-finder-v2";
 
 
 const APP_FILES = [
