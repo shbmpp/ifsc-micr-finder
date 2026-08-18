@@ -2,2659 +2,1015 @@
 <html lang="en">
 
 <head>
-  
   <meta charset="UTF-8">
-  
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  
   <meta name="theme-color" content="#6366f1">
-  
   <meta name="description" content="Free IFSC and MICR code finder for Indian bank branches">
-  
   <link rel="manifest" href="manifest.json">
-  
   <title>IFSC Finder</title>
-  
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
-      padding: 0;
+      padding: 0
     }
     
     :root {
-      
       --bg: #f5f7fb;
       --card: rgba(255, 255, 255, .82);
       --text: #111827;
       --muted: #6b7280;
       --border: #e5e7eb;
-      
       --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      
       --input: #f9fafb;
-      
       --success: #059669;
       --danger: #dc2626;
-      
-      --shadow:
-        0 20px 60px rgba(0, 0, 0, .08);
-      
+      --shadow: 0 20px 60px rgba(0, 0, 0, .08)
     }
     
     body.dark {
-      
       --bg: #080b14;
       --card: rgba(17, 24, 39, .82);
       --text: #f9fafb;
       --muted: #9ca3af;
       --border: #273244;
-      
       --input: #0b1120;
-      
-      --shadow:
-        0 25px 70px rgba(0, 0, 0, .35);
-      
+      --shadow: 0 25px 70px rgba(0, 0, 0, .35)
     }
     
     html {
-      scroll-behavior: smooth;
+      scroll-behavior: smooth
     }
     
     body {
-      
       min-height: 100dvh;
-      
-      font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-      
-      background:
-        radial-gradient(circle at 10% 0%,
-          rgba(99, 102, 241, .18),
-          transparent 30%),
-        var(--bg);
-      
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 10% 0%, rgba(99, 102, 241, .18), transparent 30%), var(--bg);
       color: var(--text);
-      
-      transition:
-        background .25s,
-        color .25s;
-      
+      transition: background .25s, color .25s
     }
     
     button,
-    input {
-      font: inherit;
+    input,
+    select {
+      font: inherit
     }
     
     button {
-      cursor: pointer;
+      cursor: pointer
     }
     
     .app {
-      
-      width: min(100% - 24px, 760px);
-      
+      width: min(100% - 16px, 760px);
       margin: auto;
-      
-      padding:
-        18px 0 40px;
-      
+      padding: 18px 0 40px
     }
     
-    /* HEADER */
-    
     header {
-      
       display: flex;
-      
       justify-content: space-between;
       align-items: center;
-      
-      margin-bottom: 22px;
-      
+      margin-bottom: 22px
     }
     
     .brand {
-      
       display: flex;
       align-items: center;
-      
-      gap: 12px;
-      
+      gap: 12px
     }
     
     .brand-icon {
-      
       width: 48px;
       height: 48px;
-      
       display: grid;
       place-items: center;
-      
       border-radius: 15px;
-      
-      background:
-        linear-gradient(135deg,
-          #6366f1,
-          #8b5cf6);
-      
-      color: white;
-      
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
       font-size: 23px;
-      
-      box-shadow:
-        0 10px 25px rgba(99, 102, 241, .25);
-      
+      box-shadow: 0 10px 25px rgba(99, 102, 241, .25)
     }
     
     .brand-title {
-      
       font-size: 18px;
-      font-weight: 800;
-      
+      font-weight: 800
     }
     
     .brand-subtitle {
-      
       color: var(--muted);
-      
       font-size: 11px;
-      
-      margin-top: 2px;
-      
+      margin-top: 2px
     }
     
     .header-actions {
-      
       display: flex;
-      gap: 7px;
-      
+      gap: 7px
     }
     
     .icon-btn {
-      
       width: 42px;
       height: 42px;
-      
       border-radius: 13px;
-      
       border: 1px solid var(--border);
-      
       background: var(--card);
-      
       color: var(--text);
-      
       backdrop-filter: blur(15px);
-      
       display: grid;
-      place-items: center;
-      
+      place-items: center
     }
     
     .icon-btn:active {
-      transform: scale(.94);
+      transform: scale(.94)
     }
     
-    /* HERO */
+    #installBtn {
+      display: none
+    }
     
     .hero {
-      
       text-align: center;
-      
-      padding:
-        25px 5px 22px;
-      
+      padding: 25px 5px 22px
     }
     
     .hero h1 {
-      
-      font-size:
-        clamp(28px, 8vw, 44px);
-      
+      font-size: clamp(28px, 8vw, 44px);
       line-height: 1.1;
-      
-      letter-spacing: -1.5px;
-      
+      letter-spacing: -1.5px
     }
     
     .gradient-text {
-      
-      background:
-        linear-gradient(90deg,
-          #6366f1,
-          #a855f7);
-      
+      background: linear-gradient(90deg, #6366f1, #a855f7);
       -webkit-background-clip: text;
       background-clip: text;
-      
-      color: transparent;
-      
+      color: transparent
     }
     
     .hero p {
-      
       color: var(--muted);
-      
       font-size: 14px;
-      
-      margin-top: 10px;
-      
+      margin-top: 10px
     }
-    
-    /* MAIN CARD */
     
     .card {
-      
       background: var(--card);
-      
-      border:
-        1px solid var(--border);
-      
+      border: 1px solid var(--border);
       border-radius: 26px;
-      
       padding: 17px;
-      
       box-shadow: var(--shadow);
-      
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      
+      -webkit-backdrop-filter: blur(20px)
     }
     
-    /* SEARCH TYPE */
-    
     .tabs {
-      
       display: grid;
-      
-      grid-template-columns:
-        repeat(2, 1fr);
-      
+      grid-template-columns: repeat(3, 1fr);
       gap: 6px;
-      
       padding: 5px;
-      
-      background:
-        var(--input);
-      
-      border:
-        1px solid var(--border);
-      
+      background: var(--input);
+      border: 1px solid var(--border);
       border-radius: 15px;
-      
-      margin-bottom: 15px;
-      
+      margin-bottom: 15px
     }
     
     .tab {
-      
       border: 0;
-      
-      padding: 12px;
-      
+      padding: 12px 6px;
       border-radius: 11px;
-      
       background: transparent;
-      
       color: var(--muted);
-      
       font-weight: 700;
-      
-      font-size: 14px;
-      
+      font-size: 13px
     }
     
     .tab.active {
-      
-      background:
-        linear-gradient(135deg,
-          var(--primary),
-          #8b5cf6);
-      
-      color: white;
-      
-      box-shadow:
-        0 5px 15px rgba(99, 102, 241, .25);
-      
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      color: #fff;
+      box-shadow: 0 5px 15px rgba(99, 102, 241, .25)
     }
     
-    /* SEARCH */
-    
     .search-area {
-      
       display: flex;
-      
-      gap: 9px;
-      
+      gap: 9px
     }
     
     .input-wrap {
-      
       flex: 1;
-      
-      position: relative;
-      
+      position: relative
     }
     
     #codeInput {
-      
       width: 100%;
-      
       height: 52px;
-      
       border-radius: 14px;
-      
-      border:
-        1px solid var(--border);
-      
+      border: 1px solid var(--border);
       background: var(--input);
-      
       color: var(--text);
-      
-      padding:
-        0 15px;
-      
+      padding: 0 15px;
       outline: none;
-      
       font-size: 16px;
-      
       font-weight: 700;
-      
       letter-spacing: .7px;
-      
-      text-transform: uppercase;
-      
+      text-transform: uppercase
     }
     
-    #codeInput:focus {
-      
-      border-color:
-        var(--primary);
-      
-      box-shadow:
-        0 0 0 3px rgba(99, 102, 241, .12);
-      
+    #codeInput:focus,
+    .location-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, .12)
     }
     
     #codeInput::placeholder {
-      
-      color:
-        var(--muted);
-      
+      color: var(--muted);
       font-weight: 500;
-      
-      letter-spacing: 0;
-      
+      letter-spacing: 0
     }
     
     .search-btn {
-      
       height: 52px;
-      
       border: 0;
-      
-      padding:
-        0 18px;
-      
+      padding: 0 18px;
       border-radius: 14px;
-      
-      background:
-        linear-gradient(135deg,
-          var(--primary),
-          #8b5cf6);
-      
-      color: white;
-      
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      color: #fff;
       font-weight: 750;
-      
-      box-shadow:
-        0 8px 20px rgba(99, 102, 241, .22);
-      
+      box-shadow: 0 8px 20px rgba(99, 102, 241, .22)
     }
     
     .search-btn:active {
-      transform: scale(.97);
+      transform: scale(.97)
     }
     
-    /* STATUS */
-    
     .status {
-      
       display: none;
-      
       margin-top: 12px;
-      
       padding: 12px 14px;
-      
       border-radius: 13px;
-      
-      font-size: 13px;
-      
+      font-size: 13px
     }
     
     .status.show {
-      display: block;
+      display: block
     }
     
     .status.loading {
-      
-      background:
-        rgba(59, 130, 246, .1);
-      
-      color:
-        #3b82f6;
-      
+      background: rgba(59, 130, 246, .1);
+      color: #3b82f6
     }
     
     .status.error {
-      
-      background:
-        rgba(220, 38, 38, .1);
-      
-      color:
-        var(--danger);
-      
+      background: rgba(220, 38, 38, .1);
+      color: var(--danger)
     }
     
     .status.success {
-      
-      background:
-        rgba(5, 150, 105, .1);
-      
-      color:
-        var(--success);
-      
+      background: rgba(5, 150, 105, .1);
+      color: var(--success)
     }
     
-    /* RESULT */
+    .location-search {
+      display: grid;
+      gap: 10px
+    }
+    
+    .location-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px
+    }
+    
+    .location-select {
+      width: 100%;
+      height: 52px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--input);
+      color: var(--text);
+      padding: 0 13px;
+      outline: none;
+      font-weight: 650
+    }
+    
+    .location-select:disabled {
+      opacity: .5
+    }
+    
+    .location-btn {
+      width: 100%
+    }
     
     .result {
-      
       display: none;
-      
-      margin-top: 17px;
-      
+      margin-top: 17px
     }
     
     .result.show {
-      display: block;
+      display: block
     }
     
     .result-head {
-      
       display: flex;
-      
       align-items: center;
-      
       gap: 13px;
-      
       padding-bottom: 17px;
-      
-      border-bottom:
-        1px solid var(--border);
-      
+      border-bottom: 1px solid var(--border)
     }
     
     .bank-avatar {
-      
       width: 55px;
       height: 55px;
-      
       flex-shrink: 0;
-      
       display: grid;
       place-items: center;
-      
       border-radius: 17px;
-      
-      background:
-        linear-gradient(135deg,
-          #6366f1,
-          #8b5cf6);
-      
-      color: white;
-      
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
       font-weight: 900;
-      
-      font-size: 19px;
-      
+      font-size: 17px
     }
     
     .bank-name {
-      
       font-size: 17px;
-      
-      font-weight: 800;
-      
+      font-weight: 800
     }
     
     .branch-name {
-      
       margin-top: 4px;
-      
       font-size: 13px;
-      
-      color: var(--muted);
-      
+      color: var(--muted)
     }
     
     .details {
-      
       display: grid;
-      
-      grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-      
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 9px;
-      
-      margin-top: 16px;
-      
+      margin-top: 16px
     }
     
     .detail {
-      
       padding: 13px;
-      
       border-radius: 14px;
-      
-      background:
-        var(--input);
-      
-      border:
-        1px solid var(--border);
-      
-      min-width: 0;
-      
+      background: var(--input);
+      border: 1px solid var(--border);
+      min-width: 0
     }
     
     .detail.full {
-      
-      grid-column:
-        1 / -1;
-      
+      grid-column: 1/-1
     }
     
     .label {
-      
       color: var(--muted);
-      
       font-size: 10px;
-      
       font-weight: 700;
-      
       text-transform: uppercase;
-      
       letter-spacing: .7px;
-      
-      margin-bottom: 6px;
-      
+      margin-bottom: 6px
     }
     
     .value {
-      
       font-size: 14px;
-      
       font-weight: 650;
-      
       overflow-wrap: anywhere;
-      
-      line-height: 1.45;
-      
+      line-height: 1.45
     }
     
     .code-row {
-      
       display: flex;
-      
       align-items: center;
-      
       justify-content: space-between;
-      
-      gap: 7px;
-      
+      gap: 7px
     }
     
     .copy {
-      
       border: 0;
-      
-      background:
-        rgba(99, 102, 241, .1);
-      
-      color:
-        var(--primary);
-      
+      background: rgba(99, 102, 241, .1);
+      color: var(--primary);
       border-radius: 8px;
-      
       padding: 6px 8px;
-      
       font-size: 13px;
-      
-      flex-shrink: 0;
-      
+      flex-shrink: 0
     }
     
-    /* SERVICES */
-    
     .services {
-      
       display: flex;
-      
       flex-wrap: wrap;
-      
       gap: 7px;
-      
-      margin-top: 14px;
-      
+      margin-top: 14px
     }
     
     .service {
-      
-      padding:
-        7px 10px;
-      
+      padding: 7px 10px;
       border-radius: 999px;
-      
-      border:
-        1px solid var(--border);
-      
+      border: 1px solid var(--border);
       color: var(--muted);
-      
       font-size: 11px;
-      
-      font-weight: 700;
-      
+      font-weight: 700
     }
     
     .service.active {
-      
-      color:
-        var(--success);
-      
-      background:
-        rgba(5, 150, 105, .08);
-      
-      border-color:
-        rgba(5, 150, 105, .3);
-      
+      color: var(--success);
+      background: rgba(5, 150, 105, .08);
+      border-color: rgba(5, 150, 105, .3)
     }
     
-    /* RESULT ACTIONS */
-    
     .result-actions {
-      
       display: grid;
-      
-      grid-template-columns:
-        repeat(2, 1fr);
-      
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
-      
-      margin-top: 13px;
-      
+      margin-top: 13px
     }
     
     .action {
-      
       height: 43px;
-      
       border-radius: 12px;
-      
-      border:
-        1px solid var(--border);
-      
-      background:
-        var(--input);
-      
+      border: 1px solid var(--border);
+      background: var(--input);
       color: var(--text);
-      
       font-size: 13px;
-      
-      font-weight: 700;
-      
+      font-weight: 700
     }
     
     .action.primary {
-      
-      color: white;
-      
+      color: #fff;
       border: 0;
-      
-      background:
-        linear-gradient(135deg,
-          var(--primary),
-          #8b5cf6);
-      
+      background: linear-gradient(135deg, var(--primary), #8b5cf6)
     }
-    
-    /* RECENT */
-    
-    .recent {
-      
-      margin-top: 20px;
-      
-    }
-    
-    .section-title {
-      
-      display: flex;
-      
-      align-items: center;
-      
-      justify-content: space-between;
-      
-      margin-bottom: 10px;
-      
-    }
-    
-    .section-title strong {
-      font-size: 15px;
-    }
-    
-    .clear {
-      
-      border: 0;
-      
-      background: transparent;
-      
-      color: var(--primary);
-      
-      font-size: 12px;
-      
-      font-weight: 700;
-      
-    }
-    
-    .recent-list {
-      
-      display: grid;
-      
-      gap: 7px;
-      
-    }
-    
-    .recent-item {
-      
-      display: flex;
-      
-      align-items: center;
-      
-      justify-content: space-between;
-      
-      gap: 10px;
-      
-      padding: 12px;
-      
-      border:
-        1px solid var(--border);
-      
-      border-radius: 13px;
-      
-      background: var(--input);
-      
-    }
-    
-    .recent-code {
-      
-      font-weight: 750;
-      font-size: 13px;
-    }
-    
-    .recent-bank {
-      
-      color: var(--muted);
-      
-      font-size: 11px;
-      
-      margin-top: 2px;
-    }
-    
-    .recent-open {
-      
-      border: 0;
-      
-      width: 35px;
-      height: 35px;
-      
-      border-radius: 10px;
-      
-      background:
-        rgba(99, 102, 241, .1);
-      
-      color:
-        var(--primary);
-      
-    }
-    
-    /* EMPTY */
     
     .empty {
-      
       text-align: center;
-      
-      padding:
-        30px 10px 12px;
-      
-      color: var(--muted);
-      
+      padding: 30px 10px 12px;
+      color: var(--muted)
     }
     
     .empty-icon {
-      
       font-size: 38px;
-      
-      margin-bottom: 10px;
-      
+      margin-bottom: 10px
     }
     
     .empty strong {
-      
       display: block;
-      
       color: var(--text);
-      
-      margin-bottom: 5px;
-      
+      margin-bottom: 5px
     }
     
     .empty p {
-      
       font-size: 12px;
-      
-      line-height: 1.5;
-      
+      line-height: 1.5
     }
     
-    /* FOOTER */
+    .recent {
+      margin-top: 20px
+    }
+    
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px
+    }
+    
+    .section-title strong {
+      font-size: 15px
+    }
+    
+    .clear {
+      border: 0;
+      background: transparent;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700
+    }
+    
+    .recent-list {
+      display: grid;
+      gap: 7px
+    }
+    
+    .recent-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--input)
+    }
+    
+    .recent-code {
+      font-weight: 750;
+      font-size: 13px
+    }
+    
+    .recent-bank {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px
+    }
+    
+    .recent-open {
+      border: 0;
+      width: 35px;
+      height: 35px;
+      border-radius: 10px;
+      background: rgba(99, 102, 241, .1);
+      color: var(--primary)
+    }
     
     footer {
-      
       text-align: center;
-      
       color: var(--muted);
-      
       font-size: 11px;
-      
       line-height: 1.6;
-      
-      margin-top: 17px;
-      
+      margin-top: 17px
     }
     
-    /* INSTALL */
-    
-    #installBtn {
-      display: none;
-    }
-    
-    /* MOBILE */
-    
-    @media (max-width: 520px) {
-      
-      .app {
-        width: min(100% - 16px, 760px);
+    @media(max-width:600px) {
+      .location-grid {
+        grid-template-columns: 1fr
       }
       
       .search-area {
-        flex-direction: column;
+        flex-direction: column
       }
       
       .search-btn {
-        width: 100%;
+        width: 100%
       }
       
       .details {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr
       }
       
       .detail.full {
-        grid-column: auto;
+        grid-column: auto
       }
-      
     }
     
-    /* REDUCED MOTION */
-    
-    @media (prefers-reduced-motion: reduce) {
+    @media(max-width:420px) {
+      .tabs {
+        grid-template-columns: 1fr
+      }
       
+      .tab {
+        padding: 11px
+      }
+    }
+    
+    @media(prefers-reduced-motion:reduce) {
+
       *,
       *::before,
       *::after {
         scroll-behavior: auto !important;
-        transition: none !important;
+        transition: none !important
       }
-      
     }
   </style>
-  
 </head>
 
-
 <body>
-  
   <div class="app">
-    
-    <!-- HEADER -->
-    
     <header>
-      
       <div class="brand">
-        
-        <div class="brand-icon">
-          🏦
-        </div>
-        
+        <div class="brand-icon">🏦</div>
         <div>
-          
-          <div class="brand-title">
-            IFSC Finder
-          </div>
-          
-          <div class="brand-subtitle">
-            Indian Bank Branch Lookup
-          </div>
-          
+          <div class="brand-title">IFSC Finder</div>
+          <div class="brand-subtitle">Indian Bank Branch Lookup</div>
         </div>
-        
       </div>
-      
-      
       <div class="header-actions">
-        
-        <button id="installBtn" class="icon-btn" title="Install">
-          📲
-        </button>
-        
-        <button id="languageBtn" class="icon-btn" title="Language">
-          বাংলা
-        </button>
-        
-        <button id="themeBtn" class="icon-btn" title="Theme">
-          🌙
-        </button>
-        
+        <button id="installBtn" class="icon-btn" title="Install">📲</button>
+        <button id="languageBtn" class="icon-btn" title="Language">বাংলা</button>
+        <button id="themeBtn" class="icon-btn" title="Theme">🌙</button>
       </div>
-      
     </header>
     
-    
-    <!-- HERO -->
-    
     <section class="hero">
-      
-      <h1>
-        
-        Find your
-        
-        <span class="gradient-text">
-          Bank Details
-        </span>
-        
-      </h1>
-      
-      <p id="heroText">
-        
-        Search any Indian bank branch using
-        IFSC or MICR code.
-        
-      </p>
-      
+      <h1>Find your <span class="gradient-text">Bank Details</span></h1>
+      <p id="heroText">Search any Indian bank branch using IFSC, MICR or location.</p>
     </section>
     
-    
-    <!-- SEARCH CARD -->
-    
     <main class="card">
-      
       <div class="tabs">
-        
-        <button class="tab active" data-type="ifsc">
-        
-          IFSC Code
-          
-        </button>
-        
-        <button class="tab" data-type="micr">
-        
-          MICR Code
-          
-        </button>
-        
+        <button class="tab active" data-type="ifsc">IFSC Code</button>
+        <button class="tab" data-type="micr">MICR Code</button>
+        <button class="tab" data-type="location">📍 Location</button>
       </div>
-      
       
       <form id="searchForm">
-        
         <div class="search-area">
-          
           <div class="input-wrap">
-            
             <input id="codeInput" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="11" placeholder="Enter 11-digit IFSC code">
-            
           </div>
-          
-          
-          <button class="search-btn" type="submit" id="searchBtn">
-          
-            Search
-            
-          </button>
-          
+          <button class="search-btn" type="submit" id="searchBtn">Search</button>
         </div>
-        
       </form>
       
+      <section id="locationSearch" class="location-search" hidden>
+        <select id="bankSelect" class="location-select">
+          <option value="">Select Bank</option>
+        </select>
+        <div class="location-grid">
+          <select id="stateSelect" class="location-select" disabled>
+            <option value="">Select State</option>
+          </select>
+          <select id="districtSelect" class="location-select" disabled>
+            <option value="">Select District</option>
+          </select>
+          <select id="branchSelect" class="location-select" disabled>
+            <option value="">Select Branch</option>
+          </select>
+        </div>
+        <button id="locationSearchBtn" class="search-btn location-btn" type="button" disabled>Find Branch</button>
+      </section>
       
-      <div id="status" class="status">
-      </div>
-      
-      
-      <!-- RESULT -->
+      <div id="status" class="status"></div>
       
       <section id="result" class="result">
-        
         <div class="result-head">
-          
-          <div id="bankAvatar" class="bank-avatar">
-            
-            🏦
-            
-          </div>
-          
+          <div id="bankAvatar" class="bank-avatar">🏦</div>
           <div>
-            
-            <div id="bankName" class="bank-name">
-              
-              —
-              
-            </div>
-            
-            <div id="branchName" class="branch-name">
-              
-              —
-              
-            </div>
-            
+            <div id="bankName" class="bank-name">—</div>
+            <div id="branchName" class="branch-name">—</div>
           </div>
-          
         </div>
-        
-        
         <div class="details">
-          
           <div class="detail">
-            
-            <div class="label">
-              IFSC Code
-            </div>
-            
-            <div class="code-row">
-              
-              <span id="ifsc" class="value">
-                —
-              </span>
-              
-              <button class="copy" data-target="ifsc">
-                Copy
-              </button>
-              
-            </div>
-            
+            <div class="label">IFSC Code</div>
+            <div class="code-row"><span id="ifsc" class="value">—</span><button class="copy" data-target="ifsc">Copy</button></div>
           </div>
-          
-          
           <div class="detail">
-            
-            <div class="label">
-              MICR Code
-            </div>
-            
-            <div class="code-row">
-              
-              <span id="micr" class="value">
-                —
-              </span>
-              
-              <button class="copy" data-target="micr">
-                Copy
-              </button>
-              
-            </div>
-            
+            <div class="label">MICR Code</div>
+            <div class="code-row"><span id="micr" class="value">—</span><button class="copy" data-target="micr">Copy</button></div>
           </div>
-          
-          
           <div class="detail">
-            
-            <div class="label">
-              Bank Code
-            </div>
-            
-            <div id="bankCode" class="value">
-              —
-            </div>
-            
+            <div class="label">Bank Code</div>
+            <div id="bankCode" class="value">—</div>
           </div>
-          
-          
           <div class="detail">
-            
-            <div class="label">
-              SWIFT / BIC
-            </div>
-            
-            <div id="swift" class="value">
-              —
-            </div>
-            
+            <div class="label">SWIFT / BIC</div>
+            <div id="swift" class="value">—</div>
           </div>
-          
-          
           <div class="detail">
-            
-            <div class="label">
-              City
-            </div>
-            
-            <div id="city" class="value">
-              —
-            </div>
-            
+            <div class="label">City</div>
+            <div id="city" class="value">—</div>
           </div>
-          
-          
           <div class="detail">
-            
-            <div class="label">
-              District
-            </div>
-            
-            <div id="district" class="value">
-              —
-            </div>
-            
+            <div class="label">District</div>
+            <div id="district" class="value">—</div>
           </div>
-          
-          
           <div class="detail">
-            
-            <div class="label">
-              State
-            </div>
-            
-            <div id="state" class="value">
-              —
-            </div>
-            
+            <div class="label">State</div>
+            <div id="state" class="value">—</div>
           </div>
-          
-          
           <div class="detail">
-            
-            <div class="label">
-              Contact
-            </div>
-            
-            <div id="contact" class="value">
-              —
-            </div>
-            
+            <div class="label">Contact</div>
+            <div id="contact" class="value">—</div>
           </div>
-          
-          
           <div class="detail full">
-            
-            <div class="label">
-              Branch Address
-            </div>
-            
-            <div id="address" class="value">
-              —
-            </div>
-            
+            <div class="label">Branch Address</div>
+            <div id="address" class="value">—</div>
           </div>
-          
         </div>
-        
-        
-        <!-- PAYMENT SERVICES -->
-        
         <div class="services">
-          
-          <span id="neft" class="service">
-            NEFT
-          </span>
-          
-          <span id="rtgs" class="service">
-            RTGS
-          </span>
-          
-          <span id="imps" class="service">
-            IMPS
-          </span>
-          
-          <span id="upi" class="service">
-            UPI
-          </span>
-          
+          <span id="neft" class="service">NEFT</span><span id="rtgs" class="service">RTGS</span><span id="imps" class="service">IMPS</span><span id="upi" class="service">UPI</span>
         </div>
-        
-        
-        <!-- ACTIONS -->
-        
         <div class="result-actions">
-          
-          <button id="shareBtn" class="action primary">
-          
-            ↗ Share
-            
-          </button>
-          
-          <button id="saveBtn" class="action">
-          
-            ☆ Save
-            
-          </button>
-          
+          <button id="shareBtn" class="action primary">↗ Share</button>
+          <button id="saveBtn" class="action">☆ Save</button>
         </div>
-        
       </section>
-      
-      
-      <!-- EMPTY -->
       
       <section id="empty" class="empty">
-        
-        <div class="empty-icon">
-          🔎
-        </div>
-        
-        <strong id="emptyTitle">
-          Search a bank branch
-        </strong>
-        
-        <p id="emptyText">
-          
-          Enter an IFSC or MICR code above
-          to view complete branch information.
-          
-        </p>
-        
+        <div class="empty-icon">🔎</div>
+        <strong id="emptyTitle">Search a bank branch</strong>
+        <p id="emptyText">Enter an IFSC or MICR code, or choose a bank and location.</p>
       </section>
       
-      
-      <!-- RECENT -->
-      
-      <section id="recentSection" class="recent">
-        
-        <div class="section-title">
-          
-          <strong id="recentTitle">
-            Recent Searches
-          </strong>
-          
-          <button id="clearRecent" class="clear">
-          
-            Clear
-            
-          </button>
-          
-        </div>
-        
-        <div id="recentList" class="recent-list">
-        </div>
-        
+      <section id="recentSection" class="recent" style="display:none">
+        <div class="section-title"><strong id="recentTitle">Recent Searches</strong><button id="clearRecent" class="clear">Clear</button></div>
+        <div id="recentList" class="recent-list"></div>
       </section>
-      
     </main>
     
-    
-    <footer id="footerText">
-      
-      Data provided through the free
-      IFSC Lookup API.
-      
-      <br>
-      
-      Verify important banking details
-      with your bank before transactions.
-      
-    </footer>
-    
+    <footer id="footerText">Data provided through the free IFSC Lookup API.<br>Verify important banking details with your bank before transactions.</footer>
   </div>
   
-  
   <script>
-    /* =========================================
-       CONFIG
-    ========================================= */
-    
-    const API_BASE =
-      "https://ifsc-api-proxy.shbmpp.workers.dev";
-      
-    const RECENT_KEY =
-      "ifscFinderRecent";
-    
-    const THEME_KEY =
-      "ifscFinderTheme";
-    
-    const LANGUAGE_KEY =
-      "ifscFinderLanguage";
-    
-    
-    /* =========================================
-       ELEMENTS
-    ========================================= */
-    
-    const $ = selector =>
-      document.querySelector(selector);
-    
-    const $$ = selector =>
-      document.querySelectorAll(selector);
-    
-    
-    const searchForm =
-      $("#searchForm");
-    
-    const codeInput =
-      $("#codeInput");
-    
-    const status =
-      $("#status");
-    
-    const result =
-      $("#result");
-    
-    const empty =
-      $("#empty");
-    
-    const recentList =
-      $("#recentList");
-    
-    const recentSection =
-      $("#recentSection");
-    
-    
-    let searchType = "ifsc";
-    
-    let currentData = null;
-    
-    
-    /* =========================================
-       LANGUAGE
-    ========================================= */
-    
+    const API_BASE = "https://ifsc-api-proxy.shbmpp.workers.dev";
+    const RECENT_KEY = "ifscFinderRecent",
+      THEME_KEY = "ifscFinderTheme",
+      LANGUAGE_KEY = "ifscFinderLanguage";
+    const $ = s => document.querySelector(s),
+      $$ = s => document.querySelectorAll(s);
+    const searchForm = $("#searchForm"),
+      codeInput = $("#codeInput"),
+      status = $("#status"),
+      result = $("#result"),
+      empty = $("#empty");
+    const locationSearch = $("#locationSearch"),
+      bankSelect = $("#bankSelect"),
+      stateSelect = $("#stateSelect"),
+      districtSelect = $("#districtSelect"),
+      branchSelect = $("#branchSelect"),
+      locationSearchBtn = $("#locationSearchBtn");
+    let searchType = "ifsc",
+      currentData = null,
+      language = localStorage.getItem(LANGUAGE_KEY) || "en";
     const translations = {
-      
-      en: {
-        
-        hero: "Search any Indian bank branch using IFSC or MICR code.",
-        
-        ifsc: "IFSC Code",
-        
-        micr: "MICR Code",
-        
-        search: "Search",
-        
-        ifscPlaceholder: "Enter 11-digit IFSC code",
-        
-        micrPlaceholder: "Enter 9-digit MICR code",
-        
-        recent: "Recent Searches",
-        
-        clear: "Clear",
-        
-        emptyTitle: "Search a bank branch",
-        
-        emptyText: "Enter an IFSC or MICR code above to view complete branch information.",
-        
-        share: "↗ Share",
-        
-        save: "☆ Save",
-        
-        saved: "★ Saved",
-        
-        loading: "Searching bank details...",
-        
-        invalidIfsc: "Please enter a valid 11-character IFSC code.",
-        
-        invalidMicr: "Please enter a valid 9-digit MICR code.",
-        
-        notFound: "No branch was found for this code.",
-        
-        copied: "Copied to clipboard.",
-        
-        footer: "Data provided through the free IFSC Lookup API.",
-        
-        verify: "Verify important banking details with your bank before transactions."
-        
-      },
-      
-      
-      bn: {
-        
-        hero: "IFSC অথবা MICR কোড দিয়ে যেকোনো ভারতীয় bank branch খুঁজুন।",
-        
-        ifsc: "IFSC Code",
-        
-        micr: "MICR Code",
-        
-        search: "Search",
-        
-        ifscPlaceholder: "১১ সংখ্যার IFSC code দিন",
-        
-        micrPlaceholder: "৯ সংখ্যার MICR code দিন",
-        
-        recent: "সাম্প্রতিক Search",
-        
-        clear: "Clear",
-        
-        emptyTitle: "Bank branch Search করুন",
-        
-        emptyText: "উপরের IFSC অথবা MICR code দিয়ে সম্পূর্ণ branch information দেখুন।",
-        
-        share: "↗ Share",
-        
-        save: "☆ Save",
-        
-        saved: "★ Saved",
-        
-        loading: "Bank details খোঁজা হচ্ছে...",
-        
-        invalidIfsc: "সঠিক ১১-character IFSC code দিন।",
-        
-        invalidMicr: "সঠিক ৯-digit MICR code দিন।",
-        
-        notFound: "এই code-এর কোনো branch পাওয়া যায়নি।",
-        
-        copied: "Clipboard-এ copy হয়েছে।",
-        
-        footer: "Free IFSC Lookup API থেকে data নেওয়া হয়েছে।",
-        
-        verify: "গুরুত্বপূর্ণ transaction-এর আগে bank-এর সঙ্গে তথ্য যাচাই করুন।"
-        
-      }
-      
+      en: { hero: "Search any Indian bank branch using IFSC, MICR or location.", ifsc: "IFSC Code", micr: "MICR Code", location: "📍 Location", search: "Search", find: "Find Branch", ifscPlaceholder: "Enter 11-digit IFSC code", micrPlaceholder: "Enter 9-digit MICR code", recent: "Recent Searches", clear: "Clear", emptyTitle: "Search a bank branch", emptyText: "Enter an IFSC or MICR code, or choose a bank and location.", share: "↗ Share", save: "☆ Save", saved: "★ Saved", loading: "Searching bank details...", loadingStates: "Loading states...", loadingDistricts: "Loading districts...", loadingBranches: "Loading branches...", finding: "Finding branch...", invalidIfsc: "Please enter a valid 11-character IFSC code.", invalidMicr: "Please enter a valid 9-digit MICR code.", notFound: "No branch was found for this code.", copied: "Copied to clipboard.", selectBank: "Select Bank", selectState: "Select State", selectDistrict: "Select District", selectBranch: "Select Branch", footer: "Data provided through the free Razorpay IFSC Toolkit.", verify: "Verify important banking details with your bank before transactions." },
+      bn: { hero: "IFSC, MICR অথবা location দিয়ে যেকোনো ভারতীয় bank branch খুঁজুন।", ifsc: "IFSC Code", micr: "MICR Code", location: "📍 Location", search: "Search", find: "Branch খুঁজুন", ifscPlaceholder: "১১ সংখ্যার IFSC code দিন", micrPlaceholder: "৯ সংখ্যার MICR code দিন", recent: "সাম্প্রতিক Search", clear: "Clear", emptyTitle: "Bank branch Search করুন", emptyText: "IFSC/MICR code দিন অথবা bank ও location নির্বাচন করুন।", share: "↗ Share", save: "☆ Save", saved: "★ Saved", loading: "Bank details খোঁজা হচ্ছে...", loadingStates: "State লোড হচ্ছে...", loadingDistricts: "District লোড হচ্ছে...", loadingBranches: "Branch লোড হচ্ছে...", finding: "Branch খোঁজা হচ্ছে...", invalidIfsc: "সঠিক ১১-character IFSC code দিন।", invalidMicr: "সঠিক ৯-digit MICR code দিন।", notFound: "এই code-এর কোনো branch পাওয়া যায়নি।", copied: "Clipboard-এ copy হয়েছে।", selectBank: "Bank নির্বাচন করুন", selectState: "State নির্বাচন করুন", selectDistrict: "District নির্বাচন করুন", selectBranch: "Branch নির্বাচন করুন", footer: "Razorpay IFSC Toolkit-এর data ব্যবহার করা হচ্ছে।", verify: "গুরুত্বপূর্ণ transaction-এর আগে bank-এর সঙ্গে তথ্য যাচাই করুন।" }
     };
-    
-    
-    let language =
-      localStorage.getItem(
-        LANGUAGE_KEY
-      ) || "en";
-    
-    
-    function t(key) {
-      
-      return translations[language][key];
-      
-    }
-    
+    const t = k => translations[language][k];
     
     function applyLanguage() {
-      
-      $("#heroText").textContent =
-        t("hero");
-      
-      $$(".tab")[0].textContent =
-        t("ifsc");
-      
-      $$(".tab")[1].textContent =
-        t("micr");
-      
-      $("#searchBtn").textContent =
-        t("search");
-      
-      $("#recentTitle").textContent =
-        t("recent");
-      
-      $("#clearRecent").textContent =
-        t("clear");
-      
-      $("#emptyTitle").textContent =
-        t("emptyTitle");
-      
-      $("#emptyText").textContent =
-        t("emptyText");
-      
-      $("#shareBtn").textContent =
-        t("share");
-      
-      $("#saveBtn").textContent =
-        currentData && isSaved(currentData) ?
-        t("saved") :
-        t("save");
-      
-      $("#footerText").innerHTML =
-        `${t("footer")}<br>${t("verify")}`;
-      
-      codeInput.placeholder =
-        searchType === "ifsc" ?
-        t("ifscPlaceholder") :
-        t("micrPlaceholder");
-      
-      $("#languageBtn").textContent =
-        language === "en" ?
-        "বাংলা" :
-        "English";
-      
+      $("#heroText").textContent = t("hero");
+      const tabs = $$(".tab");
+      tabs[0].textContent = t("ifsc");
+      tabs[1].textContent = t("micr");
+      tabs[2].textContent = t("location");
+      $("#searchBtn").textContent = t("search");
+      $("#locationSearchBtn").textContent = t("find");
+      $("#recentTitle").textContent = t("recent");
+      $("#clearRecent").textContent = t("clear");
+      $("#emptyTitle").textContent = t("emptyTitle");
+      $("#emptyText").textContent = t("emptyText");
+      $("#shareBtn").textContent = t("share");
+      $("#saveBtn").textContent = currentData && isSaved(currentData) ? t("saved") : t("save");
+      $("#footerText").innerHTML = `${t("footer")}<br>${t("verify")}`;
+      codeInput.placeholder = searchType === "ifsc" ? t("ifscPlaceholder") : t("micrPlaceholder");
+      $("#languageBtn").textContent = language === "en" ? "বাংলা" : "English";
+      bankSelect.options[0].textContent = t("selectBank");
+      stateSelect.options[0].textContent = t("selectState");
+      districtSelect.options[0].textContent = t("selectDistrict");
+      branchSelect.options[0].textContent = t("selectBranch");
       renderRecent();
-      
     }
+    $("#languageBtn").addEventListener("click", () => { language = language === "en" ? "bn" : "en";
+      localStorage.setItem(LANGUAGE_KEY, language);
+      applyLanguage() });
     
+    let theme = localStorage.getItem(THEME_KEY) || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     
-    $("#languageBtn")
-      .addEventListener("click", () => {
-        
-        language =
-          language === "en" ?
-          "bn" :
-          "en";
-        
-        localStorage.setItem(
-          LANGUAGE_KEY,
-          language
-        );
-        
-        applyLanguage();
-        
-      });
-    
-    
-    /* =========================================
-       THEME
-    ========================================= */
-    
-    function applyTheme(theme) {
-      
-      document.body.classList.toggle(
-        "dark",
-        theme === "dark"
-      );
-      
-      $("#themeBtn").textContent =
-        theme === "dark" ?
-        "☀️" :
-        "🌙";
-      
-    }
-    
-    
-    let theme =
-      localStorage.getItem(
-        THEME_KEY
-      ) ||
-      (
-        window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches ?
-        "dark" :
-        "light"
-      );
-    
-    
+    function applyTheme(v) { document.body.classList.toggle("dark", v === "dark");
+      $("#themeBtn").textContent = v === "dark" ? "☀️" : "🌙" }
     applyTheme(theme);
+    $("#themeBtn").addEventListener("click", () => { theme = theme === "dark" ? "light" : "dark";
+      localStorage.setItem(THEME_KEY, theme);
+      applyTheme(theme) });
     
+    $$(".tab").forEach(tab => tab.addEventListener("click", () => {
+      $$(".tab").forEach(x => x.classList.remove("active"));
+      tab.classList.add("active");
+      searchType = tab.dataset.type;
+      result.classList.remove("show");
+      empty.style.display = "block";
+      hideStatus();
+      if (searchType === "location") { searchForm.style.display = "none";
+        locationSearch.hidden = false; return }
+      searchForm.style.display = "block";
+      locationSearch.hidden = true;
+      codeInput.value = "";
+      codeInput.maxLength = searchType === "ifsc" ? 11 : 9;
+      codeInput.placeholder = searchType === "ifsc" ? t("ifscPlaceholder") : t("micrPlaceholder");
+      codeInput.focus();
+    }));
     
-    $("#themeBtn")
-      .addEventListener("click", () => {
-        
-        theme =
-          theme === "dark" ?
-          "light" :
-          "dark";
-        
-        localStorage.setItem(
-          THEME_KEY,
-          theme
-        );
-        
-        applyTheme(theme);
-        
-      });
-    
-    
-    /* =========================================
-       TAB
-    ========================================= */
-    
-    $$(".tab").forEach(tab => {
-      
-      tab.addEventListener(
-        "click",
-        () => {
-          
-          $$(".tab").forEach(
-            item =>
-            item.classList.remove(
-              "active"
-            )
-          );
-          
-          tab.classList.add("active");
-          
-          searchType =
-            tab.dataset.type;
-          
-          codeInput.value = "";
-          
-          codeInput.maxLength =
-            searchType === "ifsc" ?
-            11 :
-            9;
-          
-          codeInput.placeholder =
-            searchType === "ifsc" ?
-            t("ifscPlaceholder") :
-            t("micrPlaceholder");
-          
-          hideStatus();
-          
-          result.classList.remove(
-            "show"
-          );
-          
-          empty.style.display =
-            "block";
-          
-          codeInput.focus();
-          
-        }
-      );
-      
+    codeInput.addEventListener("input", () => {
+      codeInput.value = searchType === "ifsc" ? codeInput.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 11) : codeInput.value.replace(/\D/g, "").slice(0, 9);
     });
     
+    function validCode(c) { return searchType === "ifsc" ? /^[A-Z]{4}0[A-Z0-9]{6}$/.test(c) : /^\d{9}$/.test(c) }
     
-    /* =========================================
-       INPUT
-    ========================================= */
+    searchForm.addEventListener("submit", async e => {
+      e.preventDefault();
+      const code = codeInput.value.trim();
+      if (!validCode(code)) { showError(searchType === "ifsc" ? t("invalidIfsc") : t("invalidMicr")); return }
+      showLoading(t("loading"));
+      result.classList.remove("show");
+      empty.style.display = "none";
+      try {
+        const r = await fetch(`${API_BASE}/${searchType}/${encodeURIComponent(code)}`, { headers: { Accept: "application/json" } });
+        if (!r.ok) throw new Error(r.status === 404 ? t("notFound") : `HTTP ${r.status}`);
+        const raw = await r.json();
+        const data = normalize(raw);
+        if (!data.ifsc) throw new Error(t("notFound"));
+        currentData = data;
+        displayResult(data);
+        saveRecent(data);
+        hideStatus();
+      } catch (err) { console.error(err);
+        result.classList.remove("show");
+        empty.style.display = "block";
+        showError(err.message || t("notFound")) }
+    });
     
-    codeInput.addEventListener(
-      "input",
-      () => {
-        
-        if (searchType === "ifsc") {
-          
-          codeInput.value =
-            codeInput.value
-            .toUpperCase()
-            .replace(
-              /[^A-Z0-9]/g,
-              ""
-            )
-            .slice(0, 11);
-          
-        }
-        
-        else {
-          
-          codeInput.value =
-            codeInput.value
-            .replace(
-              /\D/g,
-              ""
-            )
-            .slice(0, 9);
-          
-        }
-        
-      }
-    );
-    
-    
-    /* =========================================
-       VALIDATION
-    ========================================= */
-    
-    function validCode(code) {
-      
-      if (searchType === "ifsc") {
-        
-        return /^[A-Z]{4}0[A-Z0-9]{6}$/
-          .test(code);
-        
-      }
-      
-      return /^\d{9}$/
-        .test(code);
-      
-    }
-    
-    
-    /* =========================================
-       SEARCH
-    ========================================= */
-    
-    searchForm.addEventListener(
-      "submit",
-      async event => {
-        
-        event.preventDefault();
-        
-        const code =
-          codeInput.value.trim();
-        
-        
-        if (!validCode(code)) {
-          
-          showError(
-            searchType === "ifsc" ?
-            t("invalidIfsc") :
-            t("invalidMicr")
-          );
-          
-          return;
-          
-        }
-        
-        
-        showLoading(
-          t("loading")
-        );
-        
-        
-        result.classList.remove(
-          "show"
-        );
-        
-        empty.style.display =
-          "none";
-        
-        
-        const endpoint =
-          searchType === "ifsc" ?
-          `/ifsc/${encodeURIComponent(code)}` :
-          `/micr/${encodeURIComponent(code)}`;
-        
-        
-        try {
-          
-          const response =
-            await fetch(
-              API_BASE + endpoint,
-              {
-                method: "GET",
-                headers: {
-                  "Accept": "application/json"
-                }
-              }
-            );
-          
-          
-          if (!response.ok) {
-            
-            if (
-              response.status === 404
-            ) {
-              
-              throw new Error(
-                t("notFound")
-              );
-              
-            }
-            
-            throw new Error(
-              `HTTP ${response.status}`
-            );
-            
-          }
-          
-          
-          const data =
-            await response.json();
-          
-          
-          if (
-            !data ||
-            !data.ifsc
-          ) {
-            
-            throw new Error(
-              t("notFound")
-            );
-            
-          }
-          
-          
-          currentData = data;
-          
-          displayResult(data);
-          
-          saveRecent(data);
-          
-          hideStatus();
-          
-        }
-        
-        catch (error) {
-          
-          console.error(error);
-          
-          result.classList.remove(
-            "show"
-          );
-          
-          empty.style.display =
-            "block";
-          
-          showError(
-            error.message ||
-            t("notFound")
-          );
-          
-        }
-        
-      }
-    );
-    
-    
-    /* =========================================
-       DISPLAY RESULT
-    ========================================= */
+    function normalize(x) { return { ifsc: x.IFSC || x.ifsc, micr: x.MICR || x.micr, bank_code: x.BANKCODE || x.bank_code, bank_name: x.BANK || x.bank_name, branch: x.BRANCH || x.branch, address: x.ADDRESS || x.address, city: x.CITY || x.city, district: x.DISTRICT || x.district, state: x.STATE || x.state, contact: x.CONTACT || x.contact, swift: x.SWIFT || x.swift, neft: x.NEFT === true || x.neft === true, rtgs: x.RTGS === true || x.rtgs === true, imps: x.IMPS === true || x.imps === true, upi: x.UPI === true || x.upi === true } }
     
     function displayResult(data) {
-      
-      const bank =
-        data.bank_name ||
-        "Unknown Bank";
-      
-      
-      $("#bankAvatar")
-        .textContent =
-        getInitials(bank);
-      
-      
-      $("#bankName")
-        .textContent =
-        bank;
-      
-      
-      $("#branchName")
-        .textContent =
-        data.branch ||
-        "Branch";
-      
-      
-      setText(
-        "#ifsc",
-        data.ifsc
-      );
-      
-      setText(
-        "#micr",
-        data.micr
-      );
-      
-      setText(
-        "#bankCode",
-        data.bank_code
-      );
-      
-      setText(
-        "#swift",
-        data.swift
-      );
-      
-      setText(
-        "#city",
-        data.city
-      );
-      
-      setText(
-        "#district",
-        data.district
-      );
-      
-      setText(
-        "#state",
-        data.state
-      );
-      
-      setText(
-        "#contact",
-        data.contact
-      );
-      
-      setText(
-        "#address",
-        data.address
-      );
-      
-      
-      setService(
-        "#neft",
-        "NEFT",
-        data.neft
-      );
-      
-      setService(
-        "#rtgs",
-        "RTGS",
-        data.rtgs
-      );
-      
-      setService(
-        "#imps",
-        "IMPS",
-        data.imps
-      );
-      
-      setService(
-        "#upi",
-        "UPI",
-        data.upi
-      );
-      
-      
-      $("#saveBtn").textContent =
-        isSaved(data) ?
-        t("saved") :
-        t("save");
-      
-      
-      result.classList.add(
-        "show"
-      );
-      
-      empty.style.display =
-        "none";
-      
+      $("#bankAvatar").textContent = getInitials(data.bank_name || "Bank");
+      $("#bankName").textContent = data.bank_name || "Unknown Bank";
+      $("#branchName").textContent = data.branch || "Branch";
+      setText("#ifsc", data.ifsc);
+      setText("#micr", data.micr);
+      setText("#bankCode", data.bank_code);
+      setText("#swift", data.swift);
+      setText("#city", data.city);
+      setText("#district", data.district);
+      setText("#state", data.state);
+      setText("#contact", data.contact);
+      setText("#address", data.address);
+      setService("#neft", "NEFT", data.neft);
+      setService("#rtgs", "RTGS", data.rtgs);
+      setService("#imps", "IMPS", data.imps);
+      setService("#upi", "UPI", data.upi);
+      $("#saveBtn").textContent = isSaved(data) ? t("saved") : t("save");
+      result.classList.add("show");
+      empty.style.display = "none";
     }
     
+    function setText(s, v) { $(s).textContent = v || "—" }
     
-    function setText(
-      selector,
-      value
-    ) {
-      
-      $(selector).textContent =
-        value ||
-        "—";
-      
-    }
+    function setService(s, n, v) { const el = $(s);
+      el.classList.toggle("active", v === true);
+      el.textContent = v === true ? `✓ ${n}` : `✕ ${n}` }
     
+    function getInitials(name) { const w = String(name).replace(/[^a-zA-Z ]/g, "").trim().split(/\s+/).filter(Boolean); return !w.length ? "🏦" : w.length === 1 ? w[0].slice(0, 2).toUpperCase() : (w[0][0] + w[1][0]).toUpperCase() }
     
-    function setService(
-      selector,
-      name,
-      enabled
-    ) {
-      
-      const element =
-        $(selector);
-      
-      
-      element.classList.toggle(
-        "active",
-        enabled === true
-      );
-      
-      
-      element.textContent =
-        enabled === true ?
-        `✓ ${name}` :
-        `✕ ${name}`;
-      
-    }
+    function showLoading(m) { status.className = "status show loading";
+      status.textContent = "⏳ " + m }
     
+    function showError(m) { status.className = "status show error";
+      status.textContent = "⚠️ " + m }
     
-    function getInitials(name) {
-      
-      const words =
-        name
-        .replace(
-          /[^a-zA-Z ]/g,
-          ""
-        )
-        .trim()
-        .split(/\s+/);
-      
-      
-      if (!words.length)
-        return "🏦";
-      
-      
-      if (words.length === 1)
-        return words[0]
-          .slice(0, 2)
-          .toUpperCase();
-      
-      
-      return (
-        words[0][0] +
-        words[1][0]
-      ).toUpperCase();
-      
-    }
+    function showSuccess(m) { status.className = "status show success";
+      status.textContent = "✓ " + m;
+      setTimeout(hideStatus, 1800) }
     
+    function hideStatus() { status.className = "status";
+      status.textContent = "" }
     
-    /* =========================================
-       STATUS
-    ========================================= */
+    async function api(path) { const r = await fetch(API_BASE + path, { headers: { Accept: "application/json" } }); if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() }
     
-    function showLoading(message) {
-      
-      status.className =
-        "status show loading";
-      
-      status.textContent =
-        "⏳ " + message;
-      
-    }
+    function resetSelect(el, placeholder) { el.innerHTML = `<option value="">${placeholder}</option>`;
+      el.disabled = true }
     
+    function fillSelect(el, items, placeholder) { resetSelect(el, placeholder);
+      items.forEach(v => { const o = document.createElement("option");
+        o.value = v;
+        o.textContent = v;
+        el.appendChild(o) });
+      el.disabled = !items.length }
     
-    function showError(message) {
-      
-      status.className =
-        "status show error";
-      
-      status.textContent =
-        "⚠️ " + message;
-      
-    }
-    
-    
-    function showSuccess(message) {
-      
-      status.className =
-        "status show success";
-      
-      status.textContent =
-        "✓ " + message;
-      
-      setTimeout(
-        hideStatus,
-        1800
-      );
-      
-    }
-    
-    
-    function hideStatus() {
-      
-      status.className =
-        "status";
-      
-      status.textContent =
-        "";
-      
-    }
-    
-    
-    /* =========================================
-       COPY
-    ========================================= */
-    
-    $$(".copy").forEach(button => {
-      
-      button.addEventListener(
-        "click",
-        async () => {
-          
-          const target =
-            $(
-              "#" +
-              button.dataset.target
-            );
-          
-          
-          const value =
-            target.textContent.trim();
-          
-          
-          if (
-            !value ||
-            value === "—"
-          )
-            return;
-          
-          
-          try {
-            
-            await navigator.clipboard
-              .writeText(value);
-            
-            const old =
-              button.textContent;
-            
-            button.textContent =
-              "✓";
-            
-            showSuccess(
-              t("copied")
-            );
-            
-            setTimeout(
-              () => {
-                button.textContent =
-                  old;
-              },
-              1000
-            );
-            
-          }
-          
-          catch {
-            
-            showError(
-              "Copy failed."
-            );
-            
-          }
-          
-        }
-      );
-      
-    });
-    
-    
-    /* =========================================
-       RECENT SEARCH
-    ========================================= */
-    
-    function getRecent() {
-      
+    let bankMap = {};
+    async function loadBanks() {
       try {
-        
-        return JSON.parse(
-          localStorage.getItem(
-            RECENT_KEY
-          )
-        ) || [];
-        
-      }
-      
-      catch {
-        
-        return [];
-        
-      }
-      
+        const data = await api("/banks");
+        bankMap = data;
+        const entries = Object.entries(data).sort((a, b) => a[1].localeCompare(b[1]));
+        bankSelect.innerHTML = `<option value="">${t("selectBank")}</option>`;
+        entries.forEach(([code, name]) => { const o = document.createElement("option");
+          o.value = code;
+          o.textContent = `${name} (${code})`;
+          bankSelect.appendChild(o) });
+      } catch (e) { console.error(e);
+        showError("Unable to load bank list.") }
     }
+    const STATE_CODES = { "ANDHRA PRADESH": "IN-AP", "ARUNACHAL PRADESH": "IN-AR", "ASSAM": "IN-AS", "BIHAR": "IN-BR", "CHHATTISGARH": "IN-CG", "GOA": "IN-GA", "GUJARAT": "IN-GJ", "HARYANA": "IN-HR", "HIMACHAL PRADESH": "IN-HP", "JHARKHAND": "IN-JH", "KARNATAKA": "IN-KA", "KERALA": "IN-KL", "MADHYA PRADESH": "IN-MP", "MAHARASHTRA": "IN-MH", "MANIPUR": "IN-MN", "MEGHALAYA": "IN-ML", "MIZORAM": "IN-MZ", "NAGALAND": "IN-NL", "ODISHA": "IN-OR", "PUNJAB": "IN-PB", "RAJASTHAN": "IN-RJ", "SIKKIM": "IN-SK", "TAMIL NADU": "IN-TN", "TELANGANA": "IN-TS", "TRIPURA": "IN-TR", "UTTAR PRADESH": "IN-UP", "UTTARAKHAND": "IN-UK", "WEST BENGAL": "IN-WB", "DELHI": "IN-DL", "JAMMU AND KASHMIR": "IN-JK", "LADAKH": "IN-LA", "CHANDIGARH": "IN-CH", "PUDUCHERRY": "IN-PY", "ANDAMAN AND NICOBAR ISLANDS": "IN-AN", "DADRA AND NAGAR HAVELI AND DAMAN AND DIU": "IN-DH", "LAKSHADWEEP": "IN-LD" };
     
+    bankSelect.addEventListener("change", async () => {
+      const b = bankSelect.value;
+      resetSelect(stateSelect, t("selectState"));
+      resetSelect(districtSelect, t("selectDistrict"));
+      resetSelect(branchSelect, t("selectBranch"));
+      locationSearchBtn.disabled = true;
+      if (!b) return;
+      try { showLoading(t("loadingStates")); const d = await api(`/places?bankcode=${encodeURIComponent(b)}`); const states = (d.states || []).sort();
+        states.forEach(s => { const o = document.createElement("option");
+          o.value = STATE_CODES[s] || s;
+          o.dataset.name = s;
+          o.textContent = s;
+          stateSelect.appendChild(o) });
+        stateSelect.disabled = !states.length;
+        hideStatus() } catch (e) { console.error(e);
+        showError("Unable to load states.") }
+    });
+    stateSelect.addEventListener("change", async () => {
+      const b = bankSelect.value,
+        s = stateSelect.value;
+      resetSelect(districtSelect, t("selectDistrict"));
+      resetSelect(branchSelect, t("selectBranch"));
+      locationSearchBtn.disabled = true;
+      if (!b || !s) return;
+      try { showLoading(t("loadingDistricts")); const d = await api(`/places?bankcode=${encodeURIComponent(b)}&state=${encodeURIComponent(s)}`);
+        fillSelect(districtSelect, (d.districts || []).sort(), t("selectDistrict"));
+        hideStatus() } catch (e) { console.error(e);
+        showError("Unable to load districts.") }
+    });
+    districtSelect.addEventListener("change", async () => {
+      const b = bankSelect.value,
+        s = stateSelect.value,
+        d = districtSelect.value;
+      resetSelect(branchSelect, t("selectBranch"));
+      locationSearchBtn.disabled = true;
+      if (!b || !s || !d) return;
+      try { showLoading(t("loadingBranches")); const x = await api(`/places?bankcode=${encodeURIComponent(b)}&state=${encodeURIComponent(s)}&district=${encodeURIComponent(d)}`);
+        fillSelect(branchSelect, (x.branches || []).sort(), t("selectBranch"));
+        hideStatus() } catch (e) { console.error(e);
+        showError("Unable to load branches.") }
+    });
+    branchSelect.addEventListener("change", () => { locationSearchBtn.disabled = !branchSelect.value });
     
-    function saveRecent(data) {
-      
-      let recent =
-        getRecent();
-      
-      
-      recent =
-        recent.filter(
-          item =>
-          item.ifsc !== data.ifsc
-        );
-      
-      
-      recent.unshift({
-        
-        ifsc: data.ifsc,
-        
-        micr: data.micr,
-        
-        bank: data.bank_name,
-        
-        branch: data.branch
-        
-      });
-      
-      
-      recent =
-        recent.slice(0, 8);
-      
-      
-      localStorage.setItem(
-        RECENT_KEY,
-        JSON.stringify(recent)
-      );
-      
-      
-      renderRecent();
-      
-    }
-    
-    
-    function renderRecent() {
-      
-      const recent =
-        getRecent();
-      
-      
-      recentList.innerHTML =
-        "";
-      
-      
-      if (!recent.length) {
-        
-        recentSection.style.display =
-          "none";
-        
-        return;
-        
-      }
-      
-      
-      recentSection.style.display =
-        "block";
-      
-      
-      recent.forEach(item => {
-        
-        const row =
-          document.createElement(
-            "div"
-          );
-        
-        row.className =
-          "recent-item";
-        
-        
-        row.innerHTML = `
-
-          <div>
-
-            <div class="recent-code">
-              ${escapeHTML(item.ifsc)}
-            </div>
-
-            <div class="recent-bank">
-              ${escapeHTML(
-                item.bank || ""
-              )}
-              ${item.branch
-                ? " · " +
-                  escapeHTML(
-                    item.branch
-                  )
-                : ""}
-            </div>
-
-          </div>
-
-          <button
-            class="recent-open"
-            data-ifsc="${escapeHTML(
-              item.ifsc
-            )}">
-
-            →
-
-          </button>
-
-        `;
-        
-        
-        recentList.appendChild(
-          row
-        );
-        
-      });
-      
-      
-      recentList
-        .querySelectorAll(
-          ".recent-open"
-        )
-        .forEach(button => {
-          
-          button.addEventListener(
-            "click",
-            () => {
-              
-              searchType =
-                "ifsc";
-              
-              $$(".tab")
-                .forEach(tab =>
-                  tab.classList.toggle(
-                    "active",
-                    tab.dataset.type ===
-                    "ifsc"
-                  )
-                );
-              
-              codeInput.value =
-                button.dataset.ifsc;
-              
-              codeInput.dispatchEvent(
-                new Event("input")
-              );
-              
-              searchForm.requestSubmit();
-              
-            }
-          );
-          
-        });
-      
-    }
-    
-    
-    function escapeHTML(value) {
-      
-      return String(value || "")
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-        .replace(
-          /</g,
-          "&lt;"
-        )
-        .replace(
-          />/g,
-          "&gt;"
-        )
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-        .replace(
-          /'/g,
-          "&#039;"
-        );
-      
-    }
-    
-    
-    $("#clearRecent")
-      .addEventListener(
-        "click",
-        () => {
-          
-          localStorage.removeItem(
-            RECENT_KEY
-          );
-          
-          renderRecent();
-          
+    async function findBranch() {
+      const bank = bankSelect.value,
+        state = stateSelect.value,
+        district = districtSelect.value,
+        branch = branchSelect.value;
+      if (!bank || !state || !district || !branch) return;
+      showLoading(t("finding"));
+      try {
+        let offset = 0,
+          limit = 1000,
+          match = null;
+        for (let page = 0; page < 10; page++) {
+          const d = await api(`/search?bankcode=${encodeURIComponent(bank)}&state=${encodeURIComponent(state)}&limit=${limit}&offset=${offset}`);
+          const rows = Array.isArray(d) ? d : (d.results || d.data || []);
+          match = rows.find(x => String(x.DISTRICT || "").trim().toUpperCase() === district.toUpperCase() && String(x.BRANCH || "").trim().toUpperCase() === branch.toUpperCase());
+          if (match) break;
+          if (rows.length < limit) break;
+          offset += limit;
         }
-      );
-    
-    
-    /* =========================================
-       SAVE
-    ========================================= */
-    
-    function isSaved(data) {
-      
-      const saved =
-        JSON.parse(
-          localStorage.getItem(
-            "ifscSaved"
-          ) || "[]"
-        );
-      
-      
-      return saved.some(
-        item =>
-        item.ifsc === data.ifsc
-      );
-      
+        if (!match) throw new Error("Selected branch details could not be matched.");
+        currentData = normalize(match);
+        displayResult(currentData);
+        saveRecent(currentData);
+        hideStatus();
+        result.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (e) { console.error(e);
+        showError(e.message || "Branch search failed.") }
     }
+    locationSearchBtn.addEventListener("click", findBranch);
     
+    $$(".copy").forEach(btn => btn.addEventListener("click", async () => {
+      const v = $("#" + btn.dataset.target).textContent.trim();
+      if (!v || v === "—") return;
+      try { await navigator.clipboard.writeText(v); const old = btn.textContent;
+        btn.textContent = "✓";
+        showSuccess(t("copied"));
+        setTimeout(() => btn.textContent = old, 1000) } catch { showError("Copy failed.") }
+    }));
     
-    $("#saveBtn")
-      .addEventListener(
-        "click",
-        () => {
-          
-          if (!currentData)
-            return;
-          
-          
-          let saved =
-            JSON.parse(
-              localStorage.getItem(
-                "ifscSaved"
-              ) || "[]"
-            );
-          
-          
-          const exists =
-            saved.some(
-              item =>
-              item.ifsc ===
-              currentData.ifsc
-            );
-          
-          
-          if (exists) {
-            
-            saved =
-              saved.filter(
-                item =>
-                item.ifsc !==
-                currentData.ifsc
-              );
-            
-          }
-          
-          else {
-            
-            saved.unshift({
-              ifsc: currentData.ifsc,
-              
-              micr: currentData.micr,
-              
-              bank: currentData.bank_name,
-              
-              branch: currentData.branch
-            });
-            
-          }
-          
-          
-          localStorage.setItem(
-            "ifscSaved",
-            JSON.stringify(
-              saved
-            )
-          );
-          
-          
-          $("#saveBtn").textContent =
-            isSaved(currentData) ?
-            t("saved") :
-            t("save");
-          
-        }
-      );
+    function getRecent() { try { return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]") } catch { return [] } }
     
+    function saveRecent(d) { let r = getRecent().filter(x => x.ifsc !== d.ifsc);
+      r.unshift({ ifsc: d.ifsc, micr: d.micr, bank: d.bank_name, branch: d.branch });
+      localStorage.setItem(RECENT_KEY, JSON.stringify(r.slice(0, 8)));
+      renderRecent() }
     
-    /* =========================================
-       SHARE
-    ========================================= */
+    function renderRecent() { const r = getRecent(); const list = $("#recentList");
+      list.innerHTML = ""; if (!r.length) { $("#recentSection").style.display = "none"; return } $("#recentSection").style.display = "block";
+      r.forEach(x => { const row = document.createElement("div");
+        row.className = "recent-item";
+        row.innerHTML = `<div><div class="recent-code">${escapeHTML(x.ifsc)}</div><div class="recent-bank">${escapeHTML(x.bank||"")}${x.branch?" · "+escapeHTML(x.branch):""}</div></div><button class="recent-open" data-ifsc="${escapeHTML(x.ifsc)}">→</button>`;
+        list.appendChild(row) });
+      list.querySelectorAll(".recent-open").forEach(b => b.addEventListener("click", () => { searchType = "ifsc";
+        $$(".tab").forEach(x => x.classList.toggle("active", x.dataset.type === "ifsc"));
+        searchForm.style.display = "block";
+        locationSearch.hidden = true;
+        codeInput.value = b.dataset.ifsc;
+        codeInput.dispatchEvent(new Event("input"));
+        searchForm.requestSubmit() })) }
     
-    $("#shareBtn")
-      .addEventListener(
-        "click",
-        async () => {
-          
-          if (!currentData)
-            return;
-          
-          
-          const d =
-            currentData;
-          
-          
-          const text = `
-
-${d.bank_name || ""}
-
-Branch:
-${d.branch || ""}
-
-IFSC:
-${d.ifsc || ""}
-
-MICR:
-${d.micr || ""}
-
-Address:
-${d.address || ""}
-
-City:
-${d.city || ""}
-
-State:
-${d.state || ""}
-
-          `.trim();
-          
-          
-          try {
-            
-            if (
-              navigator.share
-            ) {
-              
-              await navigator.share({
-                title: `${d.bank_name} - ${d.branch}`,
-                text
-              });
-              
-            }
-            
-            else {
-              
-              await navigator
-                .clipboard
-                .writeText(text);
-              
-              showSuccess(
-                t("copied")
-              );
-              
-            }
-            
-          }
-          
-          catch (error) {
-            
-            if (
-              error.name !==
-              "AbortError"
-            ) {
-              
-              showError(
-                "Unable to share."
-              );
-              
-            }
-            
-          }
-          
-        }
-      );
+    function escapeHTML(v) { return String(v || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;") }
+    $("#clearRecent").addEventListener("click", () => { localStorage.removeItem(RECENT_KEY);
+      renderRecent() });
     
-    
-    /* =========================================
-       PWA INSTALL
-    ========================================= */
+    function isSaved(d) { try { return JSON.parse(localStorage.getItem("ifscSaved") || "[]").some(x => x.ifsc === d.ifsc) } catch { return false } }
+    $("#saveBtn").addEventListener("click", () => { if (!currentData) return; let s = JSON.parse(localStorage.getItem("ifscSaved") || "[]"); if (s.some(x => x.ifsc === currentData.ifsc)) s = s.filter(x => x.ifsc !== currentData.ifsc);
+      else s.unshift({ ifsc: currentData.ifsc, micr: currentData.micr, bank: currentData.bank_name, branch: currentData.branch });
+      localStorage.setItem("ifscSaved", JSON.stringify(s));
+      $("#saveBtn").textContent = isSaved(currentData) ? t("saved") : t("save") });
+    $("#shareBtn").addEventListener("click", async () => { if (!currentData) return; const d = currentData,
+        text = `${d.bank_name||""}\n\nBranch: ${d.branch||""}\nIFSC: ${d.ifsc||""}\nMICR: ${d.micr||""}\nAddress: ${d.address||""}\nCity: ${d.city||""}\nDistrict: ${d.district||""}\nState: ${d.state||""}`; try { if (navigator.share) await navigator.share({ title: `${d.bank_name} - ${d.branch}`, text });
+        else { await navigator.clipboard.writeText(text);
+          showSuccess(t("copied")) } } catch (e) { if (e.name !== "AbortError") showError("Unable to share.") } });
     
     let deferredPrompt = null;
-    
-    
-    window.addEventListener(
-      "beforeinstallprompt",
-      event => {
-        
-        event.preventDefault();
-        
-        deferredPrompt =
-          event;
-        
-        $("#installBtn")
-          .style.display =
-          "grid";
-        
-      }
-    );
-    
-    
-    $("#installBtn")
-      .addEventListener(
-        "click",
-        async () => {
-          
-          if (!deferredPrompt)
-            return;
-          
-          
-          deferredPrompt.prompt();
-          
-          
-          await deferredPrompt
-            .userChoice;
-          
-          
-          deferredPrompt =
-            null;
-          
-          $("#installBtn")
-            .style.display =
-            "none";
-          
-        }
-      );
-    
-    
-    window.addEventListener(
-      "appinstalled",
-      () => {
-        
-        $("#installBtn")
-          .style.display =
-          "none";
-        
-      }
-    );
-    
-    
-    /* =========================================
-       SERVICE WORKER
-    ========================================= */
-    
-    if (
-      "serviceWorker" in navigator
-    ) {
-      
-      window.addEventListener(
-        "load",
-        () => {
-          
-          navigator.serviceWorker
-            .register(
-              "sw.js"
-            )
-            .catch(
-              console.error
-            );
-          
-        }
-      );
-      
-    }
-    
-    
-    /* =========================================
-       INITIALIZE
-    ========================================= */
-    
+    window.addEventListener("beforeinstallprompt", e => { e.preventDefault();
+      deferredPrompt = e;
+      $("#installBtn").style.display = "grid" });
+    $("#installBtn").addEventListener("click", async () => { if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      $("#installBtn").style.display = "none" });
+    window.addEventListener("appinstalled", () => $("#installBtn").style.display = "none");
+    if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(console.error));
     applyLanguage();
-    
     renderRecent();
+    loadBanks();
   </script>
-  
 </body>
 
 </html>
