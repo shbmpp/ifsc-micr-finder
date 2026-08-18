@@ -766,25 +766,108 @@
       applyTheme(theme)
     });
     
-    $$(".tab").forEach(tab => tab.addEventListener("click", () => {
-      $$(".tab").forEach(x => x.classList.remove("active"));
-      tab.classList.add("active");
-      searchType = tab.dataset.type;
-      result.classList.remove("show");
-      empty.style.display = "block";
-      hideStatus();
-      if (searchType === "location") {
-        searchForm.style.display = "none";
-        locationSearch.hidden = false;
-        return
-      }
-      searchForm.style.display = "block";
-      locationSearch.hidden = true;
-      codeInput.value = "";
-      codeInput.maxLength = searchType === "ifsc" ? 11 : 9;
-      codeInput.placeholder = searchType === "ifsc" ? t("ifscPlaceholder") : t("micrPlaceholder");
-      codeInput.focus();
-    }));
+    $$(".tab").forEach(tab => {
+      
+      tab.addEventListener("click", () => {
+        
+        // Active tab
+        $$(".tab").forEach(item => {
+          item.classList.remove("active");
+        });
+        
+        tab.classList.add("active");
+        
+        
+        // Current search type
+        searchType =
+          tab.dataset.type;
+        
+        
+        // Reset result/status
+        result.classList.remove("show");
+        empty.style.display = "block";
+        hideStatus();
+        
+        
+        /* =====================================
+           LOCATION MODE
+        ===================================== */
+        
+        if (searchType === "location") {
+          
+          // Hide IFSC/MICR form
+          searchForm.style.display = "none";
+          
+          // Show location inputs
+          locationSearch.hidden = false;
+          locationSearch.style.display = "grid";
+          
+          // Load banks
+          if (!Object.keys(bankMap).length) {
+            loadBanks();
+          }
+          
+          return;
+        }
+        
+        
+        /* =====================================
+           IFSC / MICR MODE
+        ===================================== */
+        
+        // Show IFSC/MICR form
+        searchForm.style.display = "block";
+        
+        // Hide ALL location inputs
+        locationSearch.hidden = true;
+        locationSearch.style.display = "none";
+        
+        
+        // Clear location selections
+        bankSelect.value = "";
+        
+        resetSelect(
+          stateSelect,
+          t("selectState")
+        );
+        
+        resetSelect(
+          districtSelect,
+          t("selectDistrict")
+        );
+        
+        resetSelect(
+          branchSelect,
+          t("selectBranch")
+        );
+        
+        locationSearchBtn.disabled = true;
+        
+        
+        // Clear code input
+        codeInput.value = "";
+        
+        
+        // Set correct length
+        codeInput.maxLength =
+          searchType === "ifsc" ?
+          11 :
+          9;
+        
+        
+        // Set correct placeholder
+        codeInput.placeholder =
+          searchType === "ifsc" ?
+          t("ifscPlaceholder") :
+          t("micrPlaceholder");
+        
+        
+        // Focus input
+        codeInput.focus();
+        
+      });
+      
+    });
     
     codeInput.addEventListener("input", () => {
       codeInput.value = searchType === "ifsc" ? codeInput.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 11) : codeInput.value.replace(/\D/g, "").slice(0, 9);
