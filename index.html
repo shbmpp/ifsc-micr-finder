@@ -269,7 +269,12 @@
     
     .location-search {
       display: grid;
-      gap: 10px
+      gap: 10px;
+    }
+    
+    /* IMPORTANT: hidden থাকলে কোনোভাবেই দেখাবে না */
+    #locationSearch[hidden] {
+      display: none !important;
     }
     
     .location-grid {
@@ -548,13 +553,19 @@
     }
     
     @media(max-width:420px) {
+      
       .tabs {
-        grid-template-columns: 1fr
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3px;
+        padding: 4px;
       }
       
       .tab {
-        padding: 11px
+        padding: 11px 4px;
+        font-size: 11px;
+        white-space: nowrap;
       }
+      
     }
     
     @media(prefers-reduced-motion:reduce) {
@@ -770,39 +781,46 @@
       
       tab.addEventListener("click", () => {
         
+        searchType = tab.dataset.type;
+        
+        // -------------------------------
         // Active tab
+        // -------------------------------
+        
         $$(".tab").forEach(item => {
-          item.classList.remove("active");
+          item.classList.toggle(
+            "active",
+            item === tab
+          );
         });
         
-        tab.classList.add("active");
         
-        
-        // Current search type
-        searchType =
-          tab.dataset.type;
-        
-        
+        // -------------------------------
         // Reset result/status
+        // -------------------------------
+        
         result.classList.remove("show");
         empty.style.display = "block";
         hideStatus();
         
         
-        /* =====================================
-           LOCATION MODE
-        ===================================== */
+        // =================================================
+        // LOCATION MODE
+        // =================================================
         
         if (searchType === "location") {
           
           // Hide IFSC/MICR form
+          searchForm.hidden = true;
           searchForm.style.display = "none";
           
-          // Show location inputs
+          
+          // Show Location form
           locationSearch.hidden = false;
           locationSearch.style.display = "grid";
           
-          // Load banks
+          
+          // Load banks if required
           if (!Object.keys(bankMap).length) {
             loadBanks();
           }
@@ -811,19 +829,27 @@
         }
         
         
-        /* =====================================
-           IFSC / MICR MODE
-        ===================================== */
+        // =================================================
+        // IFSC / MICR MODE
+        // =================================================
         
-        // Show IFSC/MICR form
+        // Show code search form
+        searchForm.hidden = false;
         searchForm.style.display = "block";
         
-        // Hide ALL location inputs
+        
+        // -----------------------------------------------
+        // FORCE HIDE LOCATION FORM
+        // -----------------------------------------------
+        
         locationSearch.hidden = true;
         locationSearch.style.display = "none";
         
         
-        // Clear location selections
+        // -----------------------------------------------
+        // Reset location fields
+        // -----------------------------------------------
+        
         bankSelect.value = "";
         
         resetSelect(
@@ -844,25 +870,24 @@
         locationSearchBtn.disabled = true;
         
         
-        // Clear code input
+        // -----------------------------------------------
+        // Reset code input
+        // -----------------------------------------------
+        
         codeInput.value = "";
         
-        
-        // Set correct length
         codeInput.maxLength =
           searchType === "ifsc" ?
           11 :
           9;
         
-        
-        // Set correct placeholder
         codeInput.placeholder =
           searchType === "ifsc" ?
           t("ifscPlaceholder") :
           t("micrPlaceholder");
         
         
-        // Focus input
+        // Focus
         codeInput.focus();
         
       });
