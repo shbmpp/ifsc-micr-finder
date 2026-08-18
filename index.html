@@ -1030,7 +1030,7 @@
       showLoading(t("finding"));
       try {
         let offset = 0,
-          limit = 1000,
+          limit = 100,
           match = null;
         for (let page = 0; page < 10; page++) {
           const d = await api(`/search?bankcode=${encodeURIComponent(bank)}&state=${encodeURIComponent(state)}&limit=${limit}&offset=${offset}`);
